@@ -1,2 +1,8 @@
 .venv
 config.py
+db-design.txt
+master.db
+*.db
+/quarm-db
+config.py
+tables.py

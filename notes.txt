@@ -1,0 +1,14 @@
+
+-ADd a NONE check to item parsing
+-https://wiki.project1999.com/A_Glacier_Bear <-- Respawn time broke on this
+-Add error handling for respawn time. For example, if result[0] cannot be converted to int, return None
+-Refactor all list returns
+-Format all returns
+-Possible add get_text(strip=True) on different things to debug
+-If items sold return is not None, we insert a merchant into table
+    -I think we do this by item
+    -EXAMPLE (dbo.master.item_sold):
+        -PK (item_id, npc_id)
+        -item_id: integer
+        -npc_id: integer
+        
