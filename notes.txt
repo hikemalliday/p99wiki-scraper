@@ -1,14 +1,19 @@
+-put 'omit_these' arrays into config file
+-CURRENT:
+   -Items parse done, test factions now
+   -Test faction parses before inserting
+   
 
--ADd a NONE check to item parsing
--https://wiki.project1999.com/A_Glacier_Bear <-- Respawn time broke on this
--Add error handling for respawn time. For example, if result[0] cannot be converted to int, return None
--Refactor all list returns
--Format all returns
--Possible add get_text(strip=True) on different things to debug
--If items sold return is not None, we insert a merchant into table
-    -I think we do this by item
-    -EXAMPLE (dbo.master.item_sold):
-        -PK (item_id, npc_id)
-        -item_id: integer
-        -npc_id: integer
-        
+--OOPS:
+   -From START to A bloodgill barracuda, we falsely did some INSERTS into items tables. So, npc_loot is tainted
+   -From START to A black mamba, we falsely did some INSERTs into npc_zone table:
+   -From START to second entry, we falsely did some INSERTs into Factions tables:
+            --^^ therefor first two entries will have duplicate
+      -Either go back and re run the entire parse, of try to snipe those inserts out
+   --SOLUTIONS FOR NEXT TIME:
+      -Needed constraints on the NPC tables
+      -Perhaps, when we run these alter table and / or insert functions, put in some sort of 'Are you sure?' prompt in the console
+   
+FUTURE IMPLEMENTATIONS:
+   -Parse 'items' wiki
+   -
