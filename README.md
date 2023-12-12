@@ -16,4 +16,8 @@ The database is already created. However, you could run main.py if for whatever 
 
 Thats it!
 
+The program first creates the tables, then scrapes the URL's needed and saves them into a JSON file. Then, it iterates over the JSON file, and scrapes every URL and INSERTs into the database.
+The 'root' table is scraped first 'npc_master'. The order of the other functions after these first few do no matter.
+
+
 I will eventually use the database for future projects. Soon I will also do a complete scrape / db creation of the Items pages as well.
