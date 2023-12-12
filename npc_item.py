@@ -4,8 +4,7 @@ import requests
 import sqlite3
 import config
 import parse_functions
-
-omit_these = ['None', 'Null', '', 'Error', None, "?", "???", "??"]
+import omit
 
 def npc_items_scrape():
     with open("./data/npc_urls.json", 'r') as npc_urls:
@@ -39,7 +38,7 @@ def npc_items_scrape():
                     # Items drop:
                     
                     for item_name in npc_object['Items drop']:
-                        if any(item_name == keyword for keyword in omit_these):
+                        if any(item_name == keyword for keyword in omit.omit_these):
                             continue
                         item_id = None
                         # This may look like bad code smell, but this pre-SELECT is here to avoid constraints which were autoincrementing  unnecessarily
@@ -58,7 +57,7 @@ def npc_items_scrape():
 
                     # Items sold:
                     for item_name in npc_object['Items sold']:
-                        if any(item_name == keyword for keyword in omit_these):
+                        if any(item_name == keyword for keyword in omit.omit_these):
                             continue
                         item_id = None
                         # This may look like bad code smell, but this pre-SELECT is here to avoid constraints which were autoincrementing  unnecessarily

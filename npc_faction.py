@@ -4,8 +4,7 @@ import requests
 import sqlite3
 import config
 import parse_functions
-
-omit_these = ['None', 'Null', '', 'Error', None, "?", "???", "??", "Opposing Factions", "Related Quests"]
+import omit
 
 def npc_faction_scrape():
     with open("./data/npc_urls.json", 'r') as npc_urls:
@@ -36,9 +35,9 @@ def npc_faction_scrape():
                     
                     # Factions:
                     for faction_name, faction_hit in npc_object['Factions']:
-                        if any(faction_name == value for value in omit_these):
+                        if any(faction_name == value for value in omit.omit_these):
                             continue
-                        if any(faction_hit == value for value in omit_these):
+                        if any(faction_hit == value for value in omit.omit_these):
                             faction_hit = None
                         faction_id = None
                         # This may look like bad code smell, but this pre-SELECT is here to avoid constraints which were autoincrementing unnecessarily
@@ -57,9 +56,9 @@ def npc_faction_scrape():
 
                     # Opposing factions:
                     for faction_name, faction_hit in npc_object['Opposing factions']:
-                        if any(faction_name == value for value in omit_these):
+                        if any(faction_name == value for value in omit.omit_these):
                             continue
-                        if any(faction_hit == value for value in omit_these):
+                        if any(faction_hit == value for value in omit.omit_these):
                             faction_hit = None
                         faction_id = None
                         # This may look like bad code smell, but this pre-SELECT is here to avoid constraints which were autoincrementing unnecessarily

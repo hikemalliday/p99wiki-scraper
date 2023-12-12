@@ -61,3 +61,5 @@ npc_scrape_omit = [
 'Disclaimers',
 'next 200',
 ]
+omit_these = ['None', 'Null', '', 'Error', None, "?", "???", "??", "Opposing Factions", "Related Quests"]
+convert_to_none = ["()", "?", "??", "???", "????", "Various", "Multiple", "Description needed.", "Triggered"]

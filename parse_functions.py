@@ -1,13 +1,13 @@
 from bs4 import BeautifulSoup
 import re
-import config
+import omit
 
 def get_npc_race(soup: BeautifulSoup) -> str or None:
     try:
         race_element = soup.find('b', string='Race:')
         if race_element:
             race_string = race_element.find_next_sibling(string=True).strip()
-            if race_string and race_string not in config.convert_to_none:
+            if race_string and race_string not in omit.convert_to_none:
                 return race_string
         return None
     except:
@@ -90,7 +90,7 @@ def get_npc_ac(soup: BeautifulSoup) -> int or None:
             if td_element:
                 ac_element_string = td_element.get_text(strip=True, separator=' ')
                 ac_element_string = ac_element_string.replace('AC:','').strip()
-            if ac_element_string in config.convert_to_none:
+            if ac_element_string in omit.convert_to_none:
                 return None
             return ac_element_string
         return None
@@ -123,7 +123,7 @@ def get_npc_dmg_per_hit(soup: BeautifulSoup) -> list:
         if dmg_per_hit_element:
             dmg_per_hit_string = dmg_per_hit_element.find_next_sibling(string=True)
             if dmg_per_hit_string:              
-                if any(keyword in dmg_per_hit_string for keyword in config.convert_to_none):                  
+                if any(keyword in dmg_per_hit_string for keyword in omit.convert_to_none):                  
                     return [None, None]               
                 dmg_per_hit_string = dmg_per_hit_string.strip()              
                 dmg_per_hit_string = re.sub(r'[^-\d]', '', dmg_per_hit_string)               
@@ -144,7 +144,7 @@ def get_npc_attacks_per_round(soup: BeautifulSoup) -> str or None:
                 npc_attacks_per_round_string = td_element.get_text(strip=True, separator=' ')
                 npc_attacks_per_round_string = npc_attacks_per_round_string.replace("Attacks per round:", '')
                 match = re.search(r'(\d+)', npc_attacks_per_round_string)
-                if match and match not in config.convert_to_none:
+                if match and match not in omit.convert_to_none:
                     return int(match.group())
         return None
     except:
@@ -155,7 +155,7 @@ def get_npc_description(soup: BeautifulSoup) -> str or None:
         npc_description_element = soup.find('span', string=' Description ')
         if npc_description_element:
             npc_description_string = npc_description_element.find_next('p').text
-            if npc_description_string.strip() not in config.convert_to_none:
+            if npc_description_string.strip() not in omit.convert_to_none:
                 return npc_description_string
         return None
     except:
@@ -171,14 +171,13 @@ def get_npc_special(soup: BeautifulSoup) -> list:
                 npc_special_string = td_element.get_text(strip=True, separator=' ')
                 npc_special_string = npc_special_string.replace("Special:", '').strip()
                 results = [result.strip() for result in npc_special_string.split(',')]
-                if len(results) == 1 and results[0] in config.convert_to_none:
+                if len(results) == 1 and results[0] in omit.convert_to_none:
                     return [None]
             return results
         return [None]
     except:
         return ['Error']
 
-# TODO: Need 'None' handling, otherwise it skips too far ahead
 def get_npc_items_drop(soup: BeautifulSoup) -> list:
     try:
         results = []
@@ -196,7 +195,7 @@ def get_npc_items_drop(soup: BeautifulSoup) -> list:
         return [None]
     except:
         return ['Error']
-#TODO: Need 'None' handling, otherwise it skips too far ahead         
+       
 def get_npc_items_sold(soup: BeautifulSoup) -> list:
     try:            
         results = []
@@ -233,7 +232,7 @@ def get_npc_factions(soup: BeautifulSoup) -> list:
                         faction_hit = li_element.find_next('a').find_next('span')
                         if faction_hit:
                             faction_hit = faction_hit.text.replace('(', '').replace(')', '')
-                            if faction_hit in config.convert_to_none:
+                            if faction_hit in omit.convert_to_none:
                                 faction_hit = None
                     results.append([faction_name, faction_hit])
                 return results  
@@ -241,7 +240,7 @@ def get_npc_factions(soup: BeautifulSoup) -> list:
     except:
         return ['Error']
             
-# TODO: Refactor
+# TODO: Refactor, bad code smell
 def get_npc_opposing_factions(soup: BeautifulSoup) -> list:
     try:
         results = []
@@ -259,7 +258,7 @@ def get_npc_opposing_factions(soup: BeautifulSoup) -> list:
                         faction_hit = li_element.find_next('a').find_next('span')
                         if faction_hit:
                             faction_hit = faction_hit.text.replace('(', '').replace(')', '')
-                            if faction_hit in config.convert_to_none:
+                            if faction_hit in omit.convert_to_none:
                                 faction_hit = None
                     results.append([faction_name, faction_hit])
                 return results  

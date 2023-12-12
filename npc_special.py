@@ -4,8 +4,7 @@ import requests
 import sqlite3
 import config
 import parse_functions
-
-omit_these = ['None', None, '', 'Error', 'NULL']
+import omit
 
 def npc_special_scrape():
     with open("./data/npc_urls.json", 'r') as npc_urls:
@@ -30,7 +29,7 @@ def npc_special_scrape():
                         print('NPC not found, aborting parse for now...')
                         return
                     for special_name in npc_object['Special']:
-                        if any(special_name == value for value in omit_these):
+                        if any(special_name == value for value in omit.omit_these):
                             continue
                         special_id = None
                         # This may look like bad code smell, but this pre-SELECT is here to avoid constraints which were autoincrementing unnecessarily
