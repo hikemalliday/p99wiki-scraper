@@ -1,5 +1,5 @@
 # p99wiki-scraper
-###### A python based web scraping tool I made to create a normalized database of https://wiki.project1999.com/Category:NPCs
+###### A python based web scraping tool made to create a normalized database of https://wiki.project1999.com/Category:NPCs
 
 This program scrapes the Project 1999 wiki NPC (7720 pages), and inserts the data into a normalized database. Here is the database design:
 
