@@ -7,4 +7,7 @@ I scraped the Project 1999 wiki NPC pages (7720), and inserted the data into a n
 
 The database file is located in data/master.db (SQLite)
 
+## Instructions:
+
+
 I will eventually use the database for future projects. Soon I will also do a complete scrape / db creation of the Items pages as well.
