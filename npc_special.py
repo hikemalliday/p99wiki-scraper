@@ -51,3 +51,4 @@ def npc_special_scrape():
             except Exception as e:
                 print(e)
                 return e
+            

@@ -1,6 +1,7 @@
 import sqlite3
 import config
 
+# Used for the building / debugging process
 def alter_tables():
     conn = sqlite3.connect(config.database)
     cursor = conn.cursor()

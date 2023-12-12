@@ -24,19 +24,13 @@ def get_npc_class(soup: BeautifulSoup) -> str or None:
     except:
         return 'Error'
 
-# TODO: Refactor the level that is returned: Average, min, max?
-# BAD CODE SMELL
 def get_npc_level(soup: BeautifulSoup) -> list:
     try:
-        print('test1')
         level_element = soup.find('b', string='Level:')
         if level_element:
-            print('test2')
             level_string = level_element.find_next_sibling(string=True).strip()
             match = re.search(r'\d+', level_string)
-            print('test3')
             if match:
-                # level_digits = int(match.group())
                 level_array = re.split(r'[-,]', level_string)
                 print(level_array)
                 if len(level_array) > 1:
@@ -76,11 +70,6 @@ def get_npc_respawn_time(soup: BeautifulSoup) -> int or None or str:
         return None
     except:
         return 'Error'
-
-# TODO: Remove this, probably
-def get_npc_location(soup: BeautifulSoup) -> str or None:
-    # We will probably use regex and just return the first match, format: '(5754, -2024)'
-    pass
 
 def get_npc_ac(soup: BeautifulSoup) -> int or None:
     try:

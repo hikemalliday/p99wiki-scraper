@@ -80,3 +80,5 @@ def npc_faction_scrape():
             except Exception as e:
                 print(e)
                 return e
+            
+npc_faction_scrape()

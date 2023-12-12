@@ -1,0 +1,52 @@
+-- database: c:\Users\mikeg\Desktop\projects\p99wiki-scraper\data\master.db
+
+-- Use the ▷ button in the top right corner to run the entire file.
+
+-- SELECT "npc_master"."npc_name" FROM "npc_master" WHERE "npc_id" IN (
+--     SELECT "npc_id" FROM "npc_special" WHERE "special_id" IN (
+--         SELECT "special_id" FROM "special_master" WHERE "special_name" =
+--             'Uncharmable'
+--     )
+-- )
+
+-- SELECT "npc_master"."npc_name" FROM "npc_master" WHERE "npc_id" IN (
+--     SELECT "npc_id" FROM "npc_sold" WHERE "item_id" IN (
+--         SELECT "item_id" FROM "item_master" WHERE "item_name" LIKE '%crystal%'
+--     )
+-- )
+
+
+-- npc_name + zone_name + item_name for an item_sold:
+-- SELECT DISTINCT "npc_master"."npc_name", "zone_master"."zone_name", "item_master"."item_name" 
+-- FROM "npc_master" 
+-- JOIN "npc_zone" ON "npc_master"."npc_id" = "npc_zone"."npc_id"
+-- JOIN "zone_master" ON "npc_zone"."zone_id" = "zone_master"."zone_id"
+-- JOIN "npc_sold" ON "npc_master"."npc_id" = "npc_sold"."npc_id"
+-- JOIN "item_master" ON "npc_sold"."item_id" = "item_master"."item_id"
+-- WHERE "item_master"."item_name" LIKE '%crystallized%'
+
+-- return the npc names where max hit > 500:
+-- SELECT "npc_master"."npc_name", "npc_master"."npc_max_damage_per_hit", "zone_master"."zone_name"  FROM "npc_master"
+-- JOIN "npc_zone" ON "npc_master"."npc_id" = "npc_zone"."npc_id"
+-- JOIN "zone_master" ON "npc_zone"."zone_id" = "zone_master"."zone_id"
+-- WHERE "npc_master"."npc_max_damage_per_hit" > 500;
+
+-- return the npc_names in zone: 'Plane of Growth'
+-- SELECT "npc_master"."npc_name" FROM "npc_master" 
+-- JOIN "npc_zone" ON "npc_master"."npc_id" = "npc_zone"."npc_id"
+-- JOIN "zone_master" ON "npc_zone"."zone_id" = "zone_master"."zone_id"
+-- WHERE "zone_name" = 'Plane of Growth'
+
+-- return the npc_names and item_names of npcs in PoG where item_name like 'helm'
+-- SELECT "npc_master"."npc_name", "item_master"."item_name"
+-- FROM "npc_master"
+-- JOIN "npc_loot" ON "npc_master"."npc_id" = "npc_loot"."npc_id"
+-- JOIN "item_master" ON "npc_loot"."item_id" = "item_master"."item_id"
+-- JOIN "npc_zone" ON "npc_master"."npc_id" = "npc_zone"."npc_id"
+-- JOIN "zone_master" ON "npc_zone"."zone_id" = "zone_master"."zone_id"
+-- WHERE "zone_master"."zone_name" = 'Plane of Growth' AND "item_master"."item_name" LIKE '%helm%'
+
+-- return 
+
+
+
