@@ -96,3 +96,4 @@ def create_tables():
         print(f"Error creating tables: {e}")
         return f"Error creating tables: {e}"
 
+create_tables()
