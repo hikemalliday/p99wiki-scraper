@@ -21,4 +21,4 @@ The 'root' table ('npc_master') is scraped first. The order of the other functio
 
 
 I will eventually use the database for future projects. Soon I will also do a complete scrape / db creation of the Items pages as well.
-The scrape takes quite a awhile to conplete. A couple senior dev friends of mine gave me ideas about multi-threading, thread-pooling, and such to dramatically speed up the scrape time. I will likely make a version 2 of this program in order to learn these concepts.
+The scrape takes quite awhile to conplete. A couple senior dev friends of mine gave me ideas about multi-threading, thread-pooling, and such to dramatically speed up the scrape time. I will likely make a version 2 of this program in order to learn these concepts.
