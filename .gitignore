@@ -1,5 +1,6 @@
 .venv
 config.py
+alter_tables.py
 db-design.txt
 /quarm-db
 config.py
@@ -7,4 +8,3 @@ tables.py
 notes.txt
 queries.py
 notes.txt
-alter_tables.py

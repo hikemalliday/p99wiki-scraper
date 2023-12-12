@@ -14,7 +14,7 @@ def alter_tables():
         CREATE UNIQUE INDEX idx_unique_npc_zone ON npc_zone(zone_id, npc_id);
     ''')
 
-    print('indexes added yo zone_master and npc_zone.')
+    print('indexes added to zone_master and npc_zone.')
 
 def drop_zones_tables():
     conn = sqlite3.connect(config.database)
