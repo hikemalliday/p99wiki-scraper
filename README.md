@@ -7,7 +7,13 @@ I scraped the Project 1999 wiki NPC pages (7720), and inserted the data into a n
 
 The database file is located in data/master.db (SQLite)
 
+The database is already created. However, you could run main.py if for whatever reason, you wanted to run the program.
+
 ## Instructions:
 
+- activate the venv: .venv/scripts/activate
+- run python main.py
+
+Thats it!
 
 I will eventually use the database for future projects. Soon I will also do a complete scrape / db creation of the Items pages as well.
