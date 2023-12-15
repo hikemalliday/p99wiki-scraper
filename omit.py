@@ -63,3 +63,4 @@ npc_scrape_omit = [
 ]
 omit_these = ['None', 'Null', '', 'Error', None, "?", "???", "??", "Opposing Factions", "Related Quests"]
 convert_to_none = ["()", "?", "??", "???", "????", "Various", "Multiple", "Description needed.", "Triggered"]
+item_scrape_omit = ['next 200', 'previous 200']
