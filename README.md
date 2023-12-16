@@ -4,7 +4,7 @@
 
 This program scrapes the Project 1999 wiki NPC (7720 pages), the Items wiki (11,089 pages) and inserts the data into a normalized database. Here is the database design:
 
-![](https://cdn.discordapp.com/attachments/617825237752479751/1185615375128330362/image.png?ex=6590415d&is=657dcc5d&hm=f1f03f6d835386dc87bba86c4c23b50051e192e8427ebdfd74420a4b5bbfdacd&)
+![](https://cdn.discordapp.com/attachments/617825237752479751/1185697063971860600/image.png?ex=65908d71&is=657e1871&hm=c8f8a95d5d606c963afc01ed93703f98aa1960b0d6e5aafc933c6808548b32b1&)
 
 The database file is located in data/master.db (SQLite)
 
