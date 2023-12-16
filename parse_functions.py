@@ -1,10 +1,9 @@
 from bs4 import BeautifulSoup
 import re
 import omit
-import aiohttp
-import asyncio
 import requests
 import config
+import os
 
                 
 def get_npc_race(soup: BeautifulSoup) -> str or None:
@@ -261,14 +260,14 @@ def get_npc_opposing_factions(soup: BeautifulSoup) -> list:
         return ['Error']
 
 def get_item_properties(soup: BeautifulSoup) -> list:
-    properties = ['EXPENDABLE', 'MAGIC ITEM', 'LORE ITEM', 'NO DROP', 'QUEST ITEM']
+    properties = ['EXPENDABLE', 'MAGIC ITEM', 'LORE ITEM', 'NO DROP', 'QUEST ITEM', 'NO RENT']
     try:
         properties_container = soup.find('div', class_='itemicon')
         if properties_container:
             properties_string = properties_container.find_next('p').text
             if properties_string:
                 results = [property for property in properties if property in properties_string]
-                print('properties: ' + str(results))
+                #print('properties: ' + str(results))
                 if results == []:
                     return ['None']
                 else:
@@ -308,7 +307,7 @@ def get_item_slot(soup: BeautifulSoup) -> list:
                 results = [slot for slot in slots if slot in slots_string]
                 if results == []:
                     results = ['None']
-                print('slots: ' + str(results))
+                #print('slots: ' + str(results))
                 return results
         else:
             return [None]
@@ -330,7 +329,7 @@ def get_item_class(soup: BeautifulSoup) -> list:
                     results = [class_name for class_name in classes if class_name in classes]
                     if class_info == 'All':
                         results = classes
-                    print('class info: ' + str(results))
+                    #print('class info: ' + str(results))
                     return results
         else:
             return [None]
@@ -353,7 +352,7 @@ def get_item_race(soup: BeautifulSoup) -> list:
                     results = [class_name for class_name in races if class_name in races]
                     if class_info == 'All':
                         results = races
-                    print('race info: ' + str(results))
+                    #print('race info: ' + str(results))
                     return results
         else:
             return [None]
@@ -370,7 +369,7 @@ def get_item_dmg(soup: BeautifulSoup) -> int or str or None:
                 dmg_match = re.search(r'DMG:\s*(\d+)', damage_string)
                 if dmg_match:
                     dmg = dmg_match.group(1)
-                    print('dmg: ' + str(dmg))
+                    #print('dmg: ' + str(dmg))
                     return dmg
         else:
             return None
@@ -387,7 +386,7 @@ def get_item_delay(soup: BeautifulSoup) -> int or str or None:
                 atk_delay_match = re.search(r'Atk Delay:\s*(\d+)', atk_delay_string)
                 if atk_delay_match:
                     delay = atk_delay_match.group(1)
-                    print('delay: ' + str(delay))
+                    #print('delay: ' + str(delay))
                     return delay
         else:
             return None
@@ -404,7 +403,7 @@ def get_item_ac(soup: BeautifulSoup) -> int or str or None:
                 ac_match = re.search(r'AC:\s*(\d+)', ac_string)
                 if ac_match:
                     ac = ac_match.group(1)
-                    print('AC: ' + str(ac))
+                    #print('AC: ' + str(ac))
                     return ac
         else:
             return None
@@ -421,7 +420,7 @@ def get_item_ac(soup: BeautifulSoup) -> int or str or None:
                 ac_match = re.search(r'AC:\s*(\d+)', ac_string)
                 if ac_match:
                     ac = ac_match.group(1)
-                    print('AC: ' + str(ac))
+                    #print('AC: ' + str(ac))
                     return ac
         else:
             return None
@@ -437,7 +436,7 @@ def get_item_effect(soup: BeautifulSoup) -> str or None:
             if effect_string and 'Effect:' in effect_string:
                 effect = effect_container.find_next('a').text
                 if effect:
-                    print('Effect: ' + str(effect))
+                    #print('Effect: ' + str(effect))
                     return effect
         else:
             return None
@@ -454,7 +453,7 @@ def get_item_hp(soup: BeautifulSoup) -> int or str or None:
                 hp_match = re.search(r'\bHP:\s*([+-]?\d+)', hp_string)
                 if hp_match:
                     hp = hp_match.group(1)
-                    print('HP: ' + str(hp))
+                    #print('HP: ' + str(hp))
                     return int(hp)
         else:
             return None
@@ -471,7 +470,7 @@ def get_item_mp(soup: BeautifulSoup) -> int or str or None:
                 mp_match = re.search(r'\bMANA:\s*([+-]?\d+)', mp_string)
                 if mp_match:
                     mp = mp_match.group(1)
-                    print('MANA: ' + str(mp))
+                    #print('MANA: ' + str(mp))
                     return int(mp)
         else:
             return None
@@ -488,7 +487,7 @@ def get_item_str(soup: BeautifulSoup) -> int or str or None:
                 str_match = re.search(r'\bSTR:\s*([+-]?\d+)', str_string)
                 if str_match:
                     strength = str_match.group(1)
-                    print('STR: ' + str(strength))
+                    #print('STR: ' + str(strength))
                     return int(strength)
         else:
             return None
@@ -505,7 +504,7 @@ def get_item_sta(soup: BeautifulSoup) -> int or str or None:
                 sta_match = re.search(r'\bSTA:\s*([+-]?\d+)', sta_string)
                 if sta_match:
                     sta = sta_match.group(1)
-                    print('STA: ' + str(sta))
+                    #print('STA: ' + str(sta))
                     return int(sta)
         else:
             return None
@@ -522,7 +521,7 @@ def get_item_dex(soup: BeautifulSoup) -> int or str or None:
                 dex_match = re.search(r'\bDEX:\s*([+-]?\d+)', dex_string)
                 if dex_match:
                     dex = dex_match.group(1)
-                    print('DEX: ' + str(dex))
+                    #print('DEX: ' + str(dex))
                     return int(dex)
         else:
             return None
@@ -539,7 +538,7 @@ def get_item_agi(soup: BeautifulSoup) -> int or str or None:
                 agi_match = re.search(r'\bDEX:\s*([+-]?\d+)', agi_string)
                 if agi_match:
                     agi = agi_match.group(1)
-                    print('AGI: ' + str(agi))
+                    #print('AGI: ' + str(agi))
                     return int(agi)
         else:
             return None
@@ -556,7 +555,7 @@ def get_item_wis(soup: BeautifulSoup) -> int or str or None:
                 wis_match = re.search(r'\bWIS:\s*([+-]?\d+)', wis_string)
                 if wis_match:
                     wis = wis_match.group(1)
-                    print('WIS: ' + str(wis))
+                    #print('WIS: ' + str(wis))
                     return int(wis)
         else:
             return None
@@ -573,7 +572,7 @@ def get_item_int(soup: BeautifulSoup) -> int or str or None:
                 int_match = re.search(r'\bINT:\s*([+-]?\d+)', int_string)
                 if int_match:
                     intelligence = int_match.group(1)
-                    print('MP: ' + str(intelligence))
+                    #print('MP: ' + str(intelligence))
                     return int(intelligence)
         else:
             return None
@@ -590,7 +589,7 @@ def get_item_cha(soup: BeautifulSoup) -> int or str or None:
                 cha_match = re.search(r'\bCHA:\s*([+-]?\d+)', cha_string)
                 if cha_match:
                     cha = cha_match.group(1)
-                    print('CHA: ' + str(cha))
+                    #print('CHA: ' + str(cha))
                     return int(cha)
         else:
             return None
@@ -607,7 +606,7 @@ def get_item_resists(soup: BeautifulSoup, resist_type: str) -> int or str or Non
                 resist_match = re.search(r'\b' + re.escape(resist_type) + r':\s*([+-]?\d+)', resist_string)
                 if resist_match:
                     resist = resist_match.group(1)
-                    print(f'{resist_type}: ' + str(resist))
+                    #print(f'{resist_type}: ' + str(resist))
                     return int(resist)
         else:
             return None
@@ -624,7 +623,7 @@ def get_item_wt(soup: BeautifulSoup) -> int or str or None:
                 wt_match = re.search(r'\bWT:\s*([+-]?\d+(?:\.\d+)?)', wt_string)
                 if wt_match:
                     wt = wt_match.group(1)
-                    print('WT: ' + str(wt))
+                    #print('WT: ' + str(wt))
                     return float(wt)
         else:
             return None
@@ -641,28 +640,32 @@ def get_item_size(soup: BeautifulSoup) -> str or None:
                 size_match = re.search(r'Size:\s*(\w+)', size_string)
                 if size_match:
                     size = size_match.group(1)
-                    print('SIZE: ' + str(size))
+                    #print('SIZE: ' + str(size))
                     return size
         else:
             return None
     except Exception as e:
         print(e)
         return 'Error'
-    
-def get_item_img(soup: BeautifulSoup, item_name: str) -> str:
+# TODO: Refactor returns 
+def get_item_img(soup: BeautifulSoup) -> str:
     try:
         item_container = soup.find('div', class_='floatright')
         if item_container:
             image_container = item_container.find_next('img')
             if image_container:
                 img_url = image_container.get('src')
-                response = requests.get(f'{config.base_url}{img_url}', verify=False)
-                if response.status_code == 200:
-                    print(img_url)
-                with open(f'./images/{item_name}.png', 'wb') as image:
-                    image.write(response.content)
-                    print('Image saved.')
-                    return 'Image saved.'         
+                if not os.path.exists(f'.{img_url}'):
+                    print('TEST')
+                    response = requests.get(f'{config.base_url}{img_url}', verify=False)
+                    if response.status_code == 200:
+                        with open(f'./{img_url}', 'wb') as image:
+                            image.write(response.content)
+                            print('Image saved.')
+                            print(img_url)
+                            return str(img_url)
+                else:
+                    return str(img_url)      
         else:
             return 'Error'
     except Exception as e:
