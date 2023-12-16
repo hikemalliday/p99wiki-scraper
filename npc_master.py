@@ -101,9 +101,7 @@ def npc_master_scrape():
             print(counter)
     print(counter)
 
-    npc_url_scrape()
-    npc_master_scrape()
-
+   
 
 
 

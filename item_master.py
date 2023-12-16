@@ -49,10 +49,6 @@ def item_url_scrape():
     print("Scraping complete, calling 'create_item_urls_json()'...")
     create_item_urls_json(item_list)
 
-
-# TODO:
-# This is a work in progress / rough draft:
-# Refactor errors 
 async def item_data_scrape(item: dict) -> dict or None:
     item_name = list(item.keys())[0]
     item_url = item[item_name]
@@ -365,7 +361,7 @@ async def item_data_scrape(item: dict) -> dict or None:
                 print(f'Failed to retrieve data from {item_url}')
                 return None
             
-# TODO: study this harder  
+
 async def item_master_scrape():
     with open("./data/item_urls.json", "r") as item_urls:
         data = json.load(item_urls)

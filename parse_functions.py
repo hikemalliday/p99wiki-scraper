@@ -4,8 +4,7 @@ import omit
 import requests
 import config
 import os
-
-                
+              
 def get_npc_race(soup: BeautifulSoup) -> str or None:
     try:
         race_element = soup.find('b', string='Race:')
@@ -337,7 +336,7 @@ def get_item_class(soup: BeautifulSoup) -> list:
         print(e)
         return ['Error']
     
-# TODO: Refactor
+
 def get_item_race(soup: BeautifulSoup) -> list:
     races = ['BAR', 'DEF', 'DWF', 'ERU', 'GNM', 'HEF', 'HFL', 'HIE', 'HUM', 'IKS', 'OGR', 'TRL', 'ELF']
     results = []
@@ -647,7 +646,7 @@ def get_item_size(soup: BeautifulSoup) -> str or None:
     except Exception as e:
         print(e)
         return 'Error'
-# TODO: Refactor returns 
+
 def get_item_img(soup: BeautifulSoup) -> str:
     try:
         item_container = soup.find('div', class_='floatright')
