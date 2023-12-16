@@ -17,5 +17,5 @@ The database is already created. However, you could run main.py if for whatever 
 
 Thats it!
 
-The program first creates the tables, then scrapes the URL's needed and saves them into a JSON file. Then, it iterates over the JSON file, and scrapes every URL and INSERTs the parsed pages into the database.
-The 'root' table ('npc_master') is scraped first. The order of the other functions after these first few do no matter.
+The program works by first scraping all the URLS for the wiki's. It then saves theses URLs into JSON, then it iterates over the JSON to scrape the item and npc data itself.
+I created the NPC scrape first, which does not have any async scrape calls, therefore it is much slower than the Items scrape, which I made later. The items scrape uses two python libraries called 'asyncio' and 'aiohttp' to do asyncronous scraping calls. This lessens the scrape time by a lot. I will eventually refactor the NPC scrapes to do this as well.
