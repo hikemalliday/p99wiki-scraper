@@ -27,6 +27,7 @@ def create_tables():
         cursor.execute('''
         CREATE TABLE item_master (
             item_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            eq_item_id INTEGER UNIQUE,
             item_name TEXT UNIQUE,
             item_magic BOOLEAN,
             item_lore BOOLEAN,

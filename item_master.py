@@ -5,7 +5,6 @@ import omit
 import sqlite3
 import config
 import parse_functions
-import os
 import asyncio
 import aiohttp
 
@@ -49,43 +48,31 @@ def item_url_scrape():
     print("Scraping complete, calling 'create_item_urls_json()'...")
     create_item_urls_json(item_list)
 
-async def item_data_scrape(item: dict) -> dict or None:
+async def item_master_data_scrape(item: dict) -> dict or None:
     item_name = list(item.keys())[0]
     item_url = item[item_name]
+    error_object = {item_url: {}}
+    error_flag = False
     async with aiohttp.ClientSession() as session:
         async with session.get(item_url) as response:
             if response.status == 200:
-                print(f'scraping {item_name}')
+                print(f'item_master_data_scrape(): {item_name}')
                 soup = BeautifulSoup(await response.text(), "html.parser")
-                item_object = {
-                    "Item Name": item_name,
-                    "Properties": parse_functions.get_item_properties(soup),
-                    "Slots": parse_functions.get_item_slot(soup),
-                    "Class": parse_functions.get_item_class(soup),
-                    "Race": parse_functions.get_item_race(soup),
-                    "DMG": parse_functions.get_item_dmg(soup),
-                    "Atk Delay": parse_functions.get_item_delay(soup),
-                    "AC": parse_functions.get_item_ac(soup),
-                    "Effect": parse_functions.get_item_effect(soup),
-                    "HP": parse_functions.get_item_hp(soup),
-                    "MP": parse_functions.get_item_mp(soup),
-                    "STR": parse_functions.get_item_str(soup),
-                    "STA": parse_functions.get_item_sta(soup),
-                    "DEX": parse_functions.get_item_dex(soup),
-                    "AGI": parse_functions.get_item_agi(soup),
-                    "WIS": parse_functions.get_item_wis(soup),
-                    "INT": parse_functions.get_item_int(soup),
-                    "CHA": parse_functions.get_item_cha(soup),
-                    "SV_FIRE": parse_functions.get_item_resists(soup, 'SV_FIRE'),
-                    "SV_DISEASE": parse_functions.get_item_resists(soup, 'SV_DISEASE'),
-                    "SV_COLD": parse_functions.get_item_resists(soup, 'SV_COLD'),
-                    "SV_MAGIC": parse_functions.get_item_resists(soup, 'SV_MAGIC'),
-                    "SV_POISON": parse_functions.get_item_resists(soup, 'SV_POISON'),
-                    "WT": parse_functions.get_item_wt(soup),
-                    "Size": parse_functions.get_item_size(soup),
-                    "Item Image": parse_functions.get_item_img(soup)
-                    }
+                item_object = parse_functions.get_item_object(soup, item_name)
                 
+                for key, value in item_object.items():
+                    if value == 'Error':
+                        error_flag = True
+                        error_object[item_url][key] = value
+                
+                if error_flag == True:
+                    with open('./data/item-master-error-log.json', 'r') as item_error_log_raw:
+                        item_error_log_new = json.load(item_error_log_raw)
+                        item_error_log_new.append(error_object)
+                
+                    with open('./data/item-master-error-log.json', 'w') as item_error_log:
+                        json.dump(item_error_log_new, item_error_log, indent=2)
+
                 properties = {
                     'MAGIC ITEM': False,
                     'LORE ITEM': False,
@@ -164,10 +151,7 @@ async def item_data_scrape(item: dict) -> dict or None:
                 if item_object['Slots']:
                     for slot in item_object['Slots']:
                         item_slots[slot] = True
-                # INSERT LOGIC:
-                # print(properties)
-                # print(char_classes)
-                # print(char_races)
+                
                 conn = sqlite3.connect(config.database)
                 c = conn.cursor()
                 try:
@@ -232,8 +216,6 @@ async def item_data_scrape(item: dict) -> dict or None:
                             item_object['Item Image'], 
                             ));
                     
-                    # Need to get the item ID from the insert above us,
-                    # And use it to insert into item_class, item_race, item_slot
                     item_id = c.lastrowid
                     c.execute('''INSERT INTO item_class (
                             item_id,
@@ -349,7 +331,7 @@ async def item_data_scrape(item: dict) -> dict or None:
                     conn.commit()
                     conn.close()
                    
-                    with open("./data/latest_parse.json", "w") as latest_parse_json:
+                    with open("./data/latest_item_master_parse.json", "w") as latest_parse_json:
                         json.dump([{item_name: item_url}], latest_parse_json, indent=2)
                     return item_object
                 except sqlite3.Error as e:
@@ -361,8 +343,147 @@ async def item_data_scrape(item: dict) -> dict or None:
                 print(f'Failed to retrieve data from {item_url}')
                 return None
             
+async def item_master_data_scrape_debug(item: dict) -> dict or None:
+    item_name = list(item.keys())[0]
+    item_url = item[item_name]
+    error_object = {item_url: {}}
+    async with aiohttp.ClientSession() as session:
+        async with session.get(item_url) as response:
+            if response.status == 200:
+                print(f'scraping {item_name}')
+                soup = BeautifulSoup(await response.text(), "html.parser")
+                item_object = parse_functions.get_item_object(soup, item_name)
+                
+                for key, value in item_object.items():
+                    if value == 'Error':
+                        error_object[item_url][key] = value
+                
+                with open('./data/item-error-log.json', 'r') as item_error_log_raw:
+                    item_error_log_new = json.load(item_error_log_raw)
+                    item_error_log_new.append(error_object)
+            
+                with open('./data/item-error-log.json', 'w') as item_error_log:
+                    json.dump(item_error_log_new, item_error_log, indent=2)
 
+                properties = {
+                    'MAGIC ITEM': False,
+                    'LORE ITEM': False,
+                    'NO DROP': False,
+                    'NO RENT': False,
+                    'EXPENDABLE': False,
+                    'QUEST': False
+                }
+
+                if item_object['Properties']:
+                    for prop in item_object['Properties']:
+                        properties[prop] = True
+
+                char_classes = {
+                    'ENC': False,
+                    'MAG': False,
+                    'NEC': False,
+                    'WIZ': False,
+                    'CLR': False,
+                    'DRU': False,
+                    'SHM': False,
+                    'BRD': False,
+                    'MNK': False,
+                    'RNG': False,
+                    'ROG': False,
+                    'PAL': False,
+                    'SHD': False,
+                    'WAR': False,
+                }
+
+                if item_object['Class']:
+                    for char_class in item_object['Class']:
+                        char_classes[char_class] = True
+                
+                char_races = {
+                    'BAR': False,
+                    'DEF': False,
+                    'DWF': False,
+                    'ERU': False,
+                    'GNM': False,
+                    'HEF': False,
+                    'HFL': False,
+                    'HIE': False,
+                    'HUM': False,
+                    'IKS': False,
+                    'OGR': False,
+                    'TRL': False,
+                    'ELF': False,
+                }
+
+                if item_object['Race']:
+                    for char_race in item_object['Race']:
+                        char_races[char_race] = True
+
+                item_slots = {
+                    'PRIMARY': False,
+                    'SECONDARY': False,
+                    'RANGE': False,
+                    'ARMS': False,
+                    'BACK': False,
+                    'CHEST': False,
+                    'EAR': False,
+                    'FACE': False,
+                    'FEET': False,
+                    'FINGERS': False,
+                    'HANDS': False,
+                    'HEAD': False,
+                    'LEGS': False,
+                    'NECK': False,
+                    'SHOULDERS': False,
+                    'WAIST': False,
+                    'WRIST': False,
+                    'AMMO': False,
+                }
+
+                if item_object['Slots']:
+                    for slot in item_object['Slots']:
+                        item_slots[slot] = True
+                
+            else:
+                print(f'Failed to retrieve data from {item_url}')
+                return None
+            
 async def item_master_scrape():
+    with open("./data/item_urls.json", "r") as item_urls:
+        data = json.load(item_urls)
+    with open("./data/latest_item_master_parse.json", "r") as latest_parse_json:
+        latest_parse_json = json.load(latest_parse_json)
+        
+        if latest_parse_json:
+            latest_parsed_object = latest_parse_json[-1]
+            latest_parsed_item_name = list(latest_parsed_object.keys())[0]
+            found_latest_item = False
+
+            while found_latest_item == False:
+                for index, item_object in enumerate(data):
+                    keys = list(item_object.keys())
+                    key = keys[0]
+                    if key == latest_parsed_item_name:
+                        found_latest_item = True
+                        data = data[index:]
+                        print('Match found, resuming parse from "latest parsed"...')
+                        break      
+        else:
+            found_latest_item = True
+        semaphore = asyncio.Semaphore(8)
+
+        async def limited_task(item):
+            async with semaphore:
+                return await item_master_data_scrape(item)
+        
+        tasks = [limited_task(item) for item in data]
+        results = await asyncio.gather(*tasks)
+
+        for result in results:
+            if result:
+                print(result)
+
+async def item_master_scrape_debug():
     with open("./data/item_urls.json", "r") as item_urls:
         data = json.load(item_urls)
     with open("./data/latest_parse.json", "r") as latest_parse_json:
@@ -388,7 +509,7 @@ async def item_master_scrape():
 
             async def limited_task(item):
                 async with semaphore:
-                    return await item_data_scrape(item)
+                    return await item_master_data_scrape_debug(item)
             
             tasks = [limited_task(item) for item in data]
             results = await asyncio.gather(*tasks)
