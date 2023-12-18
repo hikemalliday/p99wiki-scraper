@@ -4,8 +4,10 @@ import npc_item
 import npc_special
 import npc_zone
 import item_master
+import create_tables
 
 if __name__ == "__main__":
+    create_tables.create_tables()
     item_master.item_url_scrape()
     item_master.item_master_scrape()
     npc_master.npc_url_scrape()

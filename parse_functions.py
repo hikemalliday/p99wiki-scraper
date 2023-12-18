@@ -19,6 +19,7 @@ def get_npc_race(soup: BeautifulSoup) -> str or None:
         return None
     except:
         return 'Error'
+    
 # TODO: consider refactoring this
 def get_npc_class(soup: BeautifulSoup) -> str or None:
     try:
@@ -48,6 +49,7 @@ def get_npc_level(soup: BeautifulSoup) -> list:
         return [None, None]
     except Exception as e:
         return ['Error', 'Error']
+    
 # TODO: consider refactoring this
 def get_npc_zone(soup: BeautifulSoup) -> list:
     try:
@@ -59,7 +61,6 @@ def get_npc_zone(soup: BeautifulSoup) -> list:
     except:
         return ['Error']
 
-# TODO: Refactor. add string check, then take the first char in string.
 def get_npc_respawn_time(soup: BeautifulSoup) -> int or None or str:
     try:
         multiplier = 1
@@ -247,6 +248,10 @@ def get_npc_factions(soup: BeautifulSoup) -> list:
                         faction_hit = li_element.find_next('a').find_next('span')
                         if faction_hit:
                             faction_hit = faction_hit.text.replace('(', '').replace(')', '')
+                            try:
+                                faction_hit = int(faction_hit)
+                            except ValueError:
+                                faction_hit = None
                             if faction_hit in omit.convert_to_none:
                                 faction_hit = None
                     results.append([faction_name, faction_hit])
