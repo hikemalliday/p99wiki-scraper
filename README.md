@@ -20,4 +20,4 @@ Example screenshot of the database:
 Thats it!
 
 The program works by first scraping all the URLS for the wiki's. It then saves theses URLs into JSON, then it iterates over the JSON to scrape the item and npc data itself.
-I created the NPC scrape first, which does not have any async scrape calls, therefore it is much slower than the Items scrape, which I made later. The items scrape uses two python libraries called 'asyncio' and 'aiohttp' to do asyncronous scraping calls. This lessens the scrape time by a lot. I will eventually refactor the NPC scrapes to do this as well.
+All of the scrape function calls are async (asyncio library). This speeds up the program but a very large amount.
