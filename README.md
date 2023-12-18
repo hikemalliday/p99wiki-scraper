@@ -21,3 +21,5 @@ Thats it!
 
 The program works by first scraping all the URLS for the wiki's. It then saves theses URLs into JSON, then it iterates over the JSON to scrape the item and npc data itself.
 All of the scrape function calls are async (asyncio library). This speeds up the program but a very large amount.
+
+I added error log JSON files (located in /data) to log any failed parses. This provides me with debug / refactoring info. I also added some JSON files to track the 'latest parsed' object for all of the parses. This allows me to CONTROL C and end a parse, and when I resume the parse I can pick up right where I left off.
