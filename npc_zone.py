@@ -44,7 +44,6 @@ async def npc_zone_data_scrape(npc: dict) -> dict or None:
                         return
                     for zone_name in npc_object['Zone']:
                         zone_id = None
-                        # This may look like bad code smell, but this pre-SELECT is here to avoid constraints which were autoincrementing 'zone_master.zone_id' unnecessarily
                         c.execute("""SELECT zone_id FROM zone_master WHERE zone_name = ?""", (zone_name,))
                         zone_id = c.fetchone()
                         if zone_id:

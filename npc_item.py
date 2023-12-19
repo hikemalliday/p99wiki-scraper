@@ -50,12 +50,10 @@ async def npc_items_data_scrape(npc: str) -> dict or None:
                     print('Items sold')
                     print(npc_object['Items sold'])
                     # Items drop:
-                    
                     for item_name in npc_object['Items drop']:
                         if any(item_name == keyword for keyword in omit.omit_these):
                             continue
                         item_id = None
-                        # This may look like bad code smell, but this pre-SELECT is here to avoid constraints which were autoincrementing  unnecessarily
                         c.execute("""SELECT item_id FROM item_master WHERE item_name = ?""", (item_name,))
                         item_id = c.fetchone()
                         if item_id:
@@ -79,7 +77,6 @@ async def npc_items_data_scrape(npc: str) -> dict or None:
                         if any(item_name == keyword for keyword in omit.omit_these):
                             continue
                         item_id = None
-                        # This may look like bad code smell, but this pre-SELECT is here to avoid constraints which were autoincrementing  unnecessarily
                         c.execute("""SELECT item_id FROM item_master WHERE item_name = ?""", (item_name,))
                         item_id = c.fetchone()
                         if item_id:

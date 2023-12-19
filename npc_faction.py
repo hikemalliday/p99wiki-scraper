@@ -90,7 +90,6 @@ async def npc_faction_data_scrape(npc: dict) -> dict or None:
                         if any(faction_hit == value for value in omit.omit_these):
                             faction_hit = None
                         faction_id = None
-                        # This may look like bad code smell, but this pre-SELECT is here to avoid constraints which were autoincrementing unnecessarily
                         c.execute("""SELECT faction_id FROM faction_master WHERE faction_name = ?""", (faction_name,))
                         faction_id = c.fetchone()
                         if faction_id:
@@ -111,7 +110,6 @@ async def npc_faction_data_scrape(npc: dict) -> dict or None:
                         if any(faction_hit == value for value in omit.omit_these):
                             faction_hit = None
                         faction_id = None
-                        # This may look like bad code smell, but this pre-SELECT is here to avoid constraints which were autoincrementing unnecessarily
                         c.execute("""SELECT faction_id FROM faction_master WHERE faction_name = ?""", (faction_name,))
                         faction_id = c.fetchone()
                         if faction_id:

@@ -45,7 +45,6 @@ async def npc_special_data_scrape(npc: dict) -> dict or None:
                         if any(special_name == value for value in omit.omit_these):
                             continue
                         special_id = None
-                        # This may look like bad code smell, but this pre-SELECT is here to avoid constraints which were autoincrementing unnecessarily
                         c.execute("""SELECT special_id FROM special_master WHERE special_name = ?""", (special_name,))
                         special_id = c.fetchone()
                         if special_id:
