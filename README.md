@@ -14,8 +14,8 @@ Example screenshot of the database:
 ![](https://cdn.discordapp.com/attachments/617825237752479751/1185702644103270500/image.png?ex=659092a3&is=657e1da3&hm=c87954f861cb019d2a4541dde5e1fdc0a2daca061eebefb84d75cd5d32fc65c2&)
 ## Instructions:
 
-- activate the venv: .venv/scripts/activate
-- run python main.py
+- activate the venv: `.venv/scripts/activate`
+- run `python main.py`
 
 Thats it!
 
